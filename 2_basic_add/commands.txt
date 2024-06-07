@@ -1,0 +1,14 @@
+# Compile using any compiler to verify the results
+
+g++ -o add_gcc add.cpp
+clang++ -o add_clang add.cpp
+
+# Generate LLVM IR
+
+clang++ -O3 --target=riscv64 -emit-llvm -S add.cpp -o add.ll
+
+
+# Generate RISC-V Assembly from LLVM IR
+
+llc -march=riscv64 -filetype=asm add.ll -o add.s
+

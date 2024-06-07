@@ -1,0 +1,26 @@
+# Convert to LLVM IR without debug info and optimizations
+
+clang++ -g0 -O0 -emit-llvm -S example.cpp -o example.ll
+
+# Generate RISC-V based IR
+clang++ -g0 -O0 --target=riscv64-unknown-elf -emit-llvm -S example.cpp -o example.ll
+
+1_assignment.cpp - clang++ -g0 -O0 --target=riscv64-unknown-elf -emit-llvm -S 1_assignment.cpp -o 1_assignment.ll
+2_assignment.cpp - clang++ -g0 -O0 --target=riscv64-unknown-elf -emit-llvm -S 2_assignment.cpp -o 2_assignment.ll
+add.cpp - clang++ -g0 -O0 --target=riscv64-unknown-elf -emit-llvm -S add.cpp -o add.ll
+
+# Generate RISC-V assembly from LLVM-IR
+llc -march=riscv64 -filetype=asm example.ll -o example.s
+
+llc -march=riscv64 -filetype=asm 1_assignment.ll -o 1_assignment.s
+llc -march=riscv64 -filetype=asm 1_assignment.ll -o 2_assignment.s
+llc -march=riscv64 -filetype=asm add.ll -o add.s
+
+# Delete all the ll and .s files
+rm 1_assignment.ll 1_assignment.s 2_assignment.ll 2_assignment.s add.ll add.s
+
+# Explanation:
+
+noundef - value involved in the instruction is defined
+align 4 - specifies the memory alignment for the data, such that variable must be a multiple of 4 bytes
+nsw (No Signed Wrap) - it assumes the result does not overflow beyond what a 32-bit signed integer can represent.
